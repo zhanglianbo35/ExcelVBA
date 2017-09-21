@@ -1,0 +1,106 @@
+
+
+Sub colADJ()
+
+' colADJ Macro
+' This Macro is to adjust the SDTM spec column format , before running aCRF page insert SAS program
+
+' VALDEF
+   Sheets("VALDEF").Select
+   Cells.AutoFilter
+' Varorder
+    Columns("I:I").Select
+    Selection.TextToColumns Destination:=Range("I1"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 1), TrailingMinusNumbers:=True
+    Columns("I:I").Select
+    Selection.NumberFormat = "000"
+' LENGTH
+    Columns("E:E").Select
+    Selection.TextToColumns Destination:=Range("E1"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 1), TrailingMinusNumbers:=True
+    Columns("E:E").Select
+    Selection.NumberFormat = "General"
+' CRF page
+    Columns("N:N").Select
+    Selection.TextToColumns Destination:=Range("N1"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 1), TrailingMinusNumbers:=True
+    Columns("N:N").Select
+    Selection.NumberFormat = "@"
+
+
+
+' VARDEF
+
+    Sheets("Define_DATADEF").Select
+'    Cells.AutoFilter
+Dim i As Integer
+i = 11
+Let varRANGE = "C" & i
+
+Do While Range(varRANGE).Value <> ""
+
+    Sheets("Define_DATADEF").Select
+    Domain = Range(varRANGE).Value
+    Sheets(Domain).Select
+'    Cells.AutoFilter
+' Varorder1
+    Range("C7:C50").Select
+    Selection.TextToColumns Destination:=Range("C7"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 1), TrailingMinusNumbers:=True
+    Selection.NumberFormat = "General"
+    
+' Varorder2
+    Range("O7:O50").Select
+    Selection.TextToColumns Destination:=Range("O7"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 1), TrailingMinusNumbers:=True
+    Selection.NumberFormat = "General"
+    
+' LENGTH
+    Range("G7:G50").Select
+    Selection.TextToColumns Destination:=Range("G7"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 1), TrailingMinusNumbers:=True
+    Selection.NumberFormat = "General"
+    
+' Decimal Digits
+    Range("H3:H50").Select
+    Selection.TextToColumns Destination:=Range("H3"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 1), TrailingMinusNumbers:=True
+    Selection.NumberFormat = "General"
+    
+' Display Format
+    Range("I3:I50").Select
+    Selection.TextToColumns Destination:=Range("I3"), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 1), TrailingMinusNumbers:=True
+    Selection.NumberFormat = "General"
+    
+    
+' CRF page number
+    Range("S7:S50").Select
+    Selection.NumberFormat = "@"
+    
+    i = i + 1
+    Let varRANGE = "C" & i
+    Sheets("Define_DATADEF").Select
+Loop
+
+End Sub
+
+
+
+
