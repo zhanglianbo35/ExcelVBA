@@ -1,0 +1,28 @@
+
+'Before using this VBA, in Microsoft Visual Basic Applications Window,  go to --> Tools --> Reference , select and check "SAS.OfficeAdd-in";  
+
+' Import multiple SAS datasets into Excel Worksheets in one folder by batch
+
+Sub LoopThroughFiles()
+
+Dim directory As String, fileName As String, ws As Worksheet
+Application.ScreenUpdating = False
+Dim sas As SASExcelAddIn
+
+Dim data As SASDataView
+                          ' custiomize your dataset location and filename rule
+                          directory = "C:\Users\kcsb505\Box Sync\Dapa 055 RA for inspection\Item 33\MB102055\level2\"
+                          fileName = Dir(directory & "*.sas7bdat")
+
+Do While fileName <> ""
+Set ws = ThisWorkbook.Sheets.Add(Before:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+
+  LArray = Split(fileName, ".")
+  ws.Name = LArray(0)
+
+  Set sas = Application.COMAddIns.Item("SAS.ExcelAddIn").Object
+  Set data = sas.InsertDataFromLocalMachine(directory & fileName, ws.Range("A1"), , Ture, , , False)
+  fileName = Dir()
+Loop
+
+End Sub
