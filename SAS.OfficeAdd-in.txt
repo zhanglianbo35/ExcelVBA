@@ -11,7 +11,7 @@ Dim sas As SASExcelAddIn
 
 Dim data As SASDataView
                           ' custiomize your dataset location and filename rule
-                          directory = "C:\Users\kcsb505\Box Sync\Dapa 055 RA for inspection\Item 33\MB102055\level2\"
+                          directory = "C:\Users\kcs505\"
                           fileName = Dir(directory & "*.sas7bdat")
 
 Do While fileName <> ""
