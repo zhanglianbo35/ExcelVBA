@@ -1,5 +1,5 @@
 
-'Private Sub Workbook_Open()
+Private Sub Workbook_Open()
    On Error Resume Next
     'Reference SAS Office Add-in Object Library using Major / Minor GUID
     Set ID = ThisWorkbook.VBProject.References
