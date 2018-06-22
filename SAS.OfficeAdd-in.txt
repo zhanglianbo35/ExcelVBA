@@ -1,4 +1,3 @@
-
 Private Sub Workbook_Open()
    On Error Resume Next
     'Reference SAS Office Add-in Object Library using Major / Minor GUID
@@ -13,14 +12,19 @@ Application.ScreenUpdating = False
 Dim sas As SASExcelAddIn
 Dim data As SASDataView
 
-'----------------------------------------------------------------------------------------
+Set sas = Application.COMAddIns.Item("SAS.ExcelAddIn").Object
 
-' Input your directory and fileName type in here,  fileName support wildcards
+sas.Options.ResetAll
+sas.Options.AutomaticallyCheckForUpdates = True
 
-directory = "C:\Users\kCb505\"
+sas.Options.Excel.DataFormatting = ExcelDataFormatting_Automatic
+'sas.Options.Excel.OutputDatasetRecordsToDisplay = 1048575
+sas.Options.Excel.OutputDatasetShowInfoInWorksheet = False
+sas.Options.Excel.OutputDatasetShowRowNumbers = False
+sas.Options.UseVariableLabels = False
+    
+directory = "C:\Users\kcb505"
 fileName = Dir(directory & "*.sas7bdat")
-
-'-----------------------------------------------------------------------------------------
 
 Do While fileName <> ""
 Set ws = ThisWorkbook.Sheets.Add(Before:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
@@ -28,10 +32,11 @@ Set ws = ThisWorkbook.Sheets.Add(Before:=ThisWorkbook.Sheets(ThisWorkbook.Sheets
   LArray = Split(fileName, ".")
   ws.Name = LArray(0)
 
-  Set sas = Application.COMAddIns.Item("SAS.ExcelAddIn").Object
-  Set data = sas.InsertDataFromLocalMachine(directory & fileName, ws.Range("A1"), , Ture, , , False)
+  Set data = sas.InsertDataFromLocalMachine(directory & fileName, ws.Range("A1"), , True, , , False)
   fileName = Dir()
 Loop
+
+sas.Options.ResetAll
 
 End Sub
 
