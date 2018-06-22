@@ -1,18 +1,26 @@
 
-'Before using this VBA, in Microsoft Visual Basic Applications Window,  go to --> Tools --> Reference , select and check "SAS.OfficeAdd-in";  
+'Private Sub Workbook_Open()
+   On Error Resume Next
+    'Reference SAS Office Add-in Object Library using Major / Minor GUID
+    Set ID = ThisWorkbook.VBProject.References
+    ID.AddFromGuid "{9E9CE404-E32F-4DEC-BC01-292916642B95}", 7, 100
+End Sub
 
-' Import multiple SAS datasets into Excel Worksheets in one folder by batch
-
-Sub LoopThroughFiles()
+Private Sub LoopThroughFiles()
 
 Dim directory As String, fileName As String, ws As Worksheet
 Application.ScreenUpdating = False
 Dim sas As SASExcelAddIn
-
 Dim data As SASDataView
-                          ' custiomize your dataset location and filename rule
-                          directory = "C:\Users\kcs505\"
-                          fileName = Dir(directory & "*.sas7bdat")
+
+'----------------------------------------------------------------------------------------
+
+' Input your directory and fileName type in here,  fileName support wildcards
+
+directory = "C:\Users\kCb505\"
+fileName = Dir(directory & "*.sas7bdat")
+
+'-----------------------------------------------------------------------------------------
 
 Do While fileName <> ""
 Set ws = ThisWorkbook.Sheets.Add(Before:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
@@ -26,3 +34,9 @@ Set ws = ThisWorkbook.Sheets.Add(Before:=ThisWorkbook.Sheets(ThisWorkbook.Sheets
 Loop
 
 End Sub
+
+
+Public Function CreateReport()
+Call Workbook_Open
+Call LoopThroughFiles
+End Function
