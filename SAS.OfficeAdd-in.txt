@@ -5,8 +5,13 @@ Private Sub Workbook_Open()
     ID.AddFromGuid "{9E9CE404-E32F-4DEC-BC01-292916642B95}", 7, 100
 End Sub
 
-Private Sub LoopThroughFiles()
+Sub RefreshContents()
+    Dim sas As SASExcelAddIn
+    Set sas = Application.COMAddIns.Item("SAS.ExcelAddIn").Object
+    sas.Refresh ThisWorkbook
+End Sub
 
+Private Sub LoopThroughFiles(directory As String, files As String)
 Dim directory As String, fileName As String, ws As Worksheet
 Application.ScreenUpdating = False
 Dim sas As SASExcelAddIn
@@ -18,13 +23,15 @@ sas.Options.ResetAll
 sas.Options.AutomaticallyCheckForUpdates = True
 
 sas.Options.Excel.DataFormatting = ExcelDataFormatting_Automatic
-'sas.Options.Excel.OutputDatasetRecordsToDisplay = 1048575
+'By default, when you open a data source, the first?500?rows are displayed in the worksheet.
+'  You can change the default number of rows that are displayed to any number of rows between 1 and the record limit. Microsoft Excel limits the number of rows available in a worksheet to 1,048,575 rows.
+'sas.Options.Excel.OutputDatasetRecordsToDisplay = 1048570
 sas.Options.Excel.OutputDatasetShowInfoInWorksheet = False
 sas.Options.Excel.OutputDatasetShowRowNumbers = False
 sas.Options.UseVariableLabels = False
     
-directory = "C:\Users\kcb505"
-fileName = Dir(directory & "*.sas7bdat")
+directory = directory & "\"
+fileName = Dir(directory & files)
 
 Do While fileName <> ""
 Set ws = ThisWorkbook.Sheets.Add(Before:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
@@ -40,8 +47,13 @@ sas.Options.ResetAll
 
 End Sub
 
-
+' **************  Call the batch import process ***************************************************
 Public Function CreateReport()
+
 Call Workbook_Open
-Call LoopThroughFiles
+
+Call LoopThroughFiles("C:\Users\kcb505\Bo", "*.sas7bdat")
+
+'Call RefreshContents
 End Function
+
