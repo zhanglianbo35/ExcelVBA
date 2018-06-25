@@ -12,7 +12,7 @@ Sub RefreshContents()
 End Sub
 
 Private Sub LoopThroughFiles(directory As String, files As String)
-Dim directory As String, fileName As String, ws As Worksheet
+Dim fileName As String, ws As Worksheet
 Application.ScreenUpdating = False
 Dim sas As SASExcelAddIn
 Dim data As SASDataView
