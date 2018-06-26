@@ -5,7 +5,7 @@ Private Sub Workbook_Open()
     ID.AddFromGuid "{9E9CE404-E32F-4DEC-BC01-292916642B95}", 7, 100
 End Sub
 
-Sub RefreshContents()
+Private Sub RefreshContents()
     Dim sas As SASExcelAddIn
     Set sas = Application.COMAddIns.Item("SAS.ExcelAddIn").Object
     sas.Refresh ThisWorkbook
