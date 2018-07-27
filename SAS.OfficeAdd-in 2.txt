@@ -1,0 +1,64 @@
+Private Sub Workbook_Open()
+   On Error Resume Next
+    'Reference SAS Office Add-in Object Library using Major / Minor GUID
+    Set ID = ThisWorkbook.VBProject.References
+    ID.AddFromGuid "{9E9CE404-E32F-4DEC-BC01-292916642B95}", 7, 100
+End Sub
+
+
+Private Sub LoopThroughFiles(directory As String, files As String)
+Dim fileName As String, ws As Worksheet
+Application.ScreenUpdating = False
+Dim sas As SASExcelAddIn
+Dim data As SASDataView
+
+Set sas = Application.COMAddIns.Item("SAS.ExcelAddIn").Object
+
+sas.Options.ResetAll
+sas.Options.AutomaticallyCheckForUpdates = True
+
+sas.Options.Excel.DataFormatting = ExcelDataFormatting_Automatic
+'By default, when you open a data source, the first?500?rows are displayed in the worksheet.
+'  You can change the default number of rows that are displayed to any number of rows between 1 and the record limit. Microsoft Excel limits the number of rows available in a worksheet to 1,048,575 rows.
+'sas.Options.Excel.OutputDatasetRecordsToDisplay = 1048570
+sas.Options.Excel.OutputDatasetShowInfoInWorksheet = False
+sas.Options.Excel.OutputDatasetShowRowNumbers = False
+sas.Options.UseVariableLabels = False
+
+ 
+ 
+directory = directory & "\"
+fileName = Dir(directory & files)
+
+
+Do While fileName <> ""
+Set ws = ThisWorkbook.Sheets.Add(Before:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+
+  LArray = Split(fileName, ".")
+  ws.Name = LArray(0)
+  Set data = sas.InsertDataFromLibrary("Local", "libxlsx", ws.Name, ws.Range("A1"), , True, , , False)
+  'Set data = sas.InsertDataFromLocalMachine(directory & fileName, ws.Range("A1"), , True, , , False)
+  fileName = Dir()
+Loop
+
+sas.Options.ResetAll
+
+End Sub
+
+
+' **************  Call the batch import process ***************************************************
+Public Function CreateReport()
+
+Call Workbook_Open
+
+Call LoopThroughFiles("C:\Users\kcs\level2", "*.sas7bdat")
+
+'Call RefreshContents
+End Function
+
+
+
+'####################################################################################################
+' run the below SAS code in SAS program tab first manually. 
+libname libxlsx "C:\Users\kcs\level2";
+options fmtsearch=(libxlsx); 
